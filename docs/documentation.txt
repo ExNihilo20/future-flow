@@ -1,0 +1,16 @@
+
+Documentation Plan 
+
+| Document                       | Purpose                                                                     |
+| ------------------------------ | --------------------------------------------------------------------------- |
+| 1. System Architecture         | Overall system design, technology stack, deployment, component interactions |
+| 2. Functional Requirements     | What the application does                                                   |
+| 3. Non-Functional Requirements | Performance, security, scalability, usability, maintainability              |
+| 4. Database Design             | ER diagrams, tables, relationships, indexes                                 |
+| 5. REST API Specification      | Endpoints, request/response examples                                        |
+| 6. Forecasting Engine Design   | Cash flow prediction algorithms                                             |
+| 7. AI Integration Design       | Local LLM architecture, prompts, fallback behavior                          |
+| 8. Security Architecture       | Authentication, authorization, encryption, secrets                          |
+| 9. Deployment Guide            | Docker, Compose, Jenkins pipeline                                           |
+| 10. Development Roadmap        | Milestones and implementation order                                         |
+
