@@ -7,8 +7,12 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 
+import { AppLoggerService } from './logging/app-logger.service';
+
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
+  constructor(private readonly logger: AppLoggerService) {}
+
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -38,6 +42,19 @@ export class ApiExceptionFilter implements ExceptionFilter {
         errors: Array.isArray(message) ? message : [],
       });
       return;
+    }
+
+    if (exception instanceof Error) {
+      this.logger.error(
+        exception.message,
+        exception.stack,
+        ApiExceptionFilter.name,
+      );
+    } else {
+      this.logger.error(
+        `Unknown exception: ${String(exception)}`,
+        ApiExceptionFilter.name,
+      );
     }
 
     response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
