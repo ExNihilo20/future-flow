@@ -24,6 +24,9 @@ services:
       JWT_SECRET: ${JWT_SECRET:-change-me-in-production-use-a-long-random-string}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
       PORT: ${API_PORT:-3000}
+      LOG_DIR: /var/log/futureflow
+    volumes:
+      - ./logs:/var/log/futureflow
     ports:
       - "3000:3000"
     depends_on:
