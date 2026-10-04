@@ -2,6 +2,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { AppLoggerService } from './common/logging/app-logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -30,5 +31,8 @@ async function bootstrap() {
 
   const port = process.env.PORT ?? 3000;
   await app.listen(port);
+  // log startup messages
+  const logger = app.get(AppLoggerService);
+  logger.log(`FutureFlow API listening on port ${port}`, 'Bootstrap');
 }
 bootstrap();
