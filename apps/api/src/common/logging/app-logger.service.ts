@@ -7,15 +7,22 @@ import {
   Logger as WinstonLogger,
   transports,
 } from 'winston';
-
+import { ConfigService } from '@nestjs/config';
 import { getLogDirectory } from './log-path.util';
 
 @Injectable()
 export class AppLoggerService implements LoggerService {
   private readonly logger: WinstonLogger;
 
-  constructor() {
-    const logDirectory = getLogDirectory();
+  constructor(private readonly configService: ConfigService) {
+    const logLevel = this.configService.get<string>('LOG_LEVEL', 'info');
+    const logMaxSize = this.configService.get<number>(
+      'LOG_MAX_SIZE',
+      5 * 1024 * 1024,
+    );
+    const logMaxFiles = this.configService.get<number>('LOG_MAX_FILES', 5);
+    const configuredLogDirectory = this.configService.get<string>('LOG_DIR');
+    const logDirectory = getLogDirectory(configuredLogDirectory);
 
     fs.mkdirSync(logDirectory, { recursive: true });
 
@@ -31,22 +38,22 @@ export class AppLoggerService implements LoggerService {
     );
 
     this.logger = createLogger({
-      level: process.env.LOG_LEVEL ?? 'info',
+      level: logLevel,
       format: logFormat,
       transports: [
         new transports.Console(),
 
         new transports.File({
           filename: path.join(logDirectory, 'futureflow.log'),
-          maxsize: 5 * 1024 * 1024,
-          maxFiles: 5,
+          maxsize: logMaxSize,
+          maxFiles: logMaxFiles,
         }),
 
         new transports.File({
           filename: path.join(logDirectory, 'error.log'),
           level: 'error',
-          maxsize: 5 * 1024 * 1024,
-          maxFiles: 5,
+          maxsize: logMaxSize,
+          maxFiles: logMaxFiles,
         }),
       ],
     });
