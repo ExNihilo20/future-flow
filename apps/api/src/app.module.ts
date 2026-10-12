@@ -6,12 +6,14 @@ import { AuthModule } from './auth/auth.module';
 import { HealthController } from './health.controller';
 import { LoggingModule } from './common/logging/logging.module';
 import { ApiExceptionFilter } from './common/api-exception.filter';
+import { validateConfig } from './config/validate-config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['.env', '../../.env'],
+      validate: validateConfig,
     }),
     LoggingModule,
     PrismaModule,
