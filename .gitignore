@@ -1,2 +1,5 @@
+# Local application configuration
+.env
+
 # Runtime logs
 logs/
