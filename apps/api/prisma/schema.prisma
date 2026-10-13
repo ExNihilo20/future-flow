@@ -14,5 +14,40 @@ model User {
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
 
+  accounts   Account[]
+  categories Category[]
+
   @@map("users")
+}
+
+model Account {
+  id              String   @id @default(uuid())
+  userId          String   @map("user_id")
+  name            String
+  accountType     String   @map("account_type")
+  startingBalance Decimal  @map("starting_balance") @db.Decimal(14, 2)
+  currentBalance  Decimal  @map("current_balance") @db.Decimal(14, 2)
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user_id User @relation(fields: [userId], references: [id])
+
+  @@map("accounts")
+}
+
+model Category {
+  id               String   @id @default(uuid())
+  userId           String   @map("user_id")
+  name             String
+  type             String
+  parentCategoryId String?  @map("parent_category_id")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  parentCategory  Category?  @relation("CategoryHierarchy", fields: [parentCategoryId], references: [id])
+  childCategories Category[] @relation("CategoryHierarchy")
+
+  @@map("categories")
 }
